@@ -1,19 +1,21 @@
 const jwt = require('jsonwebtoken');
-const Local = require('../models/local')
+const Local = require('../models/local');
 
-async function requireAuthLocal(req, res, next){
+async function requireAuthLocal(req, res, next) {
     try {
-        const token = req.cookies.Authorization;
+        const token = req.cookies['Authorization-local'];
+        if (!token) return res.sendStatus(401);
+
         const decoded = jwt.verify(token, process.env.SECRET);
 
-        if(Date.now() > decoded.exp) return res.sendStatus(401);
         const local = await Local.findById(decoded.sub);
-        
-        if(!local) return res.sendStatus(401);
+        if (!local) return res.sendStatus(401);
+
         req.local = local;
-        next();
+        next(); 
     } catch (error) {
-        return res.sendStatus(401)
+        console.error("Erro de autenticação:", error); 
+        return res.sendStatus(401); 
     }
 }
 

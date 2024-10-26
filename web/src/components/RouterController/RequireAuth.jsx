@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import userStore from '../stores/userStore';
+import userStore from '../../stores/userStore';
 import { Navigate } from 'react-router-dom';
 
 export default function RequireAuth(props) {

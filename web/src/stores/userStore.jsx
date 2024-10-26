@@ -4,7 +4,7 @@ import axios from 'axios';
 const userStore = create((set) => ({
 
     loggedIn: null,
-    user: null, // Estado para armazenar os dados do usuário logado
+    user: null, 
      
     createForm: { 
       nome: "", 

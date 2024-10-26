@@ -10,16 +10,6 @@ export default function Login() {
     const [errors, setErrors] = useState({ email: '', senha: '' });
     const [isLoading, setIsLoading] = useState(false); 
 
-    useEffect(() => {
-        const checkUserLoggedIn = async () => {
-            await store.checkAuth();
-            if (store.loggedIn) {
-                navigate('/profile-user');
-            }
-        };
-        checkUserLoggedIn(); 
-    }, [store, navigate]);
-
     const handleLogin = async (e) => {
         e.preventDefault();
         setErrors({ email: '', senha: '' });

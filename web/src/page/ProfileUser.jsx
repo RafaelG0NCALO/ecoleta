@@ -9,7 +9,6 @@ export default function ProfileUser() {
   const { user, fetchUserProfile, loggedIn, updateUser } = userStore();
   const navigate = useNavigate();
   
-  // Estados locais para os campos do formulário
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -23,7 +22,6 @@ export default function ProfileUser() {
     }
   }, [loggedIn, fetchUserProfile, navigate]);
 
-  // Atualiza os campos do formulário com os dados do usuário assim que eles estão disponíveis
   useEffect(() => {
     if (user) {
       setFormData({
@@ -33,7 +31,6 @@ export default function ProfileUser() {
     }
   }, [user]);
 
-  // Função para lidar com a mudança dos campos do formulário
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -42,11 +39,10 @@ export default function ProfileUser() {
     });
   };
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateUser(user._id, formData); // Atualiza o usuário no backend
+      await updateUser(user._id, formData);
       alert('Usuário atualizado com sucesso!');
     } catch (error) {
       alert('Erro ao atualizar o usuário.');
@@ -60,7 +56,7 @@ export default function ProfileUser() {
   return (
     <div className='w-full h-full min-h-[calc(100vh-80px)] flex justify-center'>
       <div className='w-full max-w-[1440px] flex items-center flex-col p-4'>
-        <Welcome />
+        <Welcome userData={user}/>
 
         <div className='flex justify-center w-full mt-28 gap-10'>
           <form onSubmit={handleSubmit} className='flex-1 max-w-3xl bg-white p-6 rounded-xl'>

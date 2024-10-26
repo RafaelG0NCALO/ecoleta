@@ -9,11 +9,11 @@ export default function LocalProfile() {
 
   useEffect(() => {
     if (!loggedInLocal) {
-      navigate('/login');
+      navigate('/login-local');
     } else {
       fetchUserProfileLocal();
     }
-  }, [loggedInLocal, fetchUserProfileLocal, navigate]);
+  }, [loggedInLocal, navigate]);
   
   if (!local) {
     return <div>Carregando dados do usuário...</div>;
@@ -21,7 +21,7 @@ export default function LocalProfile() {
   return (
     <div className='w-full h-full min-h-[calc(100vh-80px)] flex justify-center'>
       <div className='w-full max-w-[1440px] flex items-center flex-col p-4'>
-        <Welcome />
+        <Welcome userData={local} />
       </div>
     </div>
   )

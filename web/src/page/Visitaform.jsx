@@ -16,15 +16,15 @@ export default function Visitaform() {
           fetchUserProfile(); 
         }
       }, [loggedIn, fetchUserProfile, navigate]);
-      if (!user) {
-        return <div>Carregando dados do usuário...</div>;
-      }
+      
+    if (!user) {
+      return <div>Carregando dados do usuário...</div>;
+    }
 
   return (
     <div className='w-full h-full min-h-[calc(100vh-80px)] flex justify-center'>
       <div className='w-full max-w-[1440px] flex items-center flex-col p-4'>
-        <Welcome/>
-        
+        <Welcome userData={user}/>
         <FormVisita/>
       </div>
     </div>

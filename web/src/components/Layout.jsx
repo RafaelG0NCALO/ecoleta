@@ -4,20 +4,29 @@ import Routers from "../routers/Routers";
 import logo from '../assets/logo.png';
 import { ArrowLeft, Coins, LogOut } from 'lucide-react';
 import userStore from '../stores/userStore';
+import localStore from '../stores/localStore';
 
 const Layout = () => {
   const navigate = useNavigate(); 
   const location = useLocation();
   const { user, loggedIn, logout } = userStore(); 
+  const { local, loggedInLocal, logoutLocal } = localStore(); 
   const [pontos, setPontos] = useState(user?.pontos || 0);
 
   const handleBack = () => {
     navigate('/home'); 
   };
+
   const handleLogout = async () => {
     await logout(); 
     navigate('/home');
   };
+
+  const handleLogoutLocal = async () => {
+    await logoutLocal(); 
+    navigate('/home');
+  };
+
 
   useEffect(() => {
     if (user) {
@@ -31,13 +40,16 @@ const Layout = () => {
         <div className="flex items-center">
           <img src={logo} className="w-36" alt="Logo" />
         </div>
-        {loggedIn ? (
+        {loggedIn || loggedInLocal ? (
             <div className='flex items-center gap-4'>
-              <div className='flex text-[#2dab66] text-lg items-center gap-2 p-1 px-2 rounded-md border border-[#55dd92]'>
-                <Coins/>
-                {pontos}
-              </div>
-              <LogOut className='cursor-pointer' color='#34CB79' onClick={handleLogout}/>
+              {user &&
+                <div className='flex text-[#2dab66] text-lg items-center gap-2 p-1 px-2 rounded-md border border-[#55dd92]'>
+                  <Coins/>
+                  {pontos}
+                </div>
+              }
+              {user &&  <LogOut className='cursor-pointer' color='#34CB79' onClick={handleLogout}/>}
+              {local && <LogOut className='cursor-pointer' color='#34CB79' onClick={handleLogoutLocal}/>}
             </div>
         ) : location.pathname !== '/home' ? (
           <button onClick={handleBack} className="mr-4 flex items-center gap-4 text-[] p-2 rounded-md">

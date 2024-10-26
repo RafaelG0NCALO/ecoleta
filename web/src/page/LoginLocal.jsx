@@ -11,16 +11,6 @@ export default function LoginLocal() {
     const [errors, setErrors] = useState({ email: '', senha: '' });
     const [isLoading, setIsLoading] = useState(false); 
 
-    // useEffect(() => {
-    //     const checkUserLoggedInLocal = async () => {
-    //         await store.checkAuthLocal();
-    //         if (store.loggedInLocal) {
-    //             navigate('/local-profile');
-    //         }
-    //     };
-    //     checkUserLoggedInLocal(); 
-    // }, [store, navigate]);
-
     const handleLoginLocal = async (e) => {
         e.preventDefault();
         setErrors({ email: '', senha: '' });

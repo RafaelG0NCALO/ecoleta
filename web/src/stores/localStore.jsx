@@ -26,6 +26,7 @@ const localStore = create((set) => ({
             senha: ""
         }})  
     },
+
     updateCreateFormFieldLocal: (e) => {
         const { name, value } = e.target;
         set((state) => ({
@@ -35,6 +36,7 @@ const localStore = create((set) => ({
             }
         }));
     },
+
     loginLocal: async () => {
         const { loginFormLocal } = localStore.getState();
         await axios.post('/login-local', loginFormLocal);
@@ -43,6 +45,7 @@ const localStore = create((set) => ({
           senha: "" 
         }});
     },
+
     checkAuthLocal: async () => {
         try{
           await axios.get('/check-auth-local');
@@ -51,6 +54,7 @@ const localStore = create((set) => ({
           set({ loggedInLocal: false });
         }
     },
+
     updateLoginFormLocal: (e) => {
         const{ name, value } = e.target 
          set((state) => {
@@ -62,6 +66,7 @@ const localStore = create((set) => ({
            }
          }) 
      },
+     
      fetchUserProfileLocal: async () => {
       try {
         const res = await axios.get('/profile-user-local'); 
@@ -70,6 +75,12 @@ const localStore = create((set) => ({
         console.log("Erro ao buscar o perfil do usuário:", error);
       }
     },
+
+    logoutLocal: async () => {
+      await axios.get('/logout-local'); 
+      set({ loggedInLocal: false, local: null });
+    },
+
 }));
 
 export default localStore;

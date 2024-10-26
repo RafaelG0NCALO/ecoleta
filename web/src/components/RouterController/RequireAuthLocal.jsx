@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import localStore from '../stores/localStore';
+import localStore from '../../stores/localStore';
 
 export default function RequireAuthLocal(props) {
   const store = localStore();
