@@ -79,10 +79,44 @@ const getLoggedUserLocal = (req, res) => {
     res.json({ local: req.local });
 };
 
+const addColeta = async (req, res) => {
+    try {
+        const token = req.cookies['Authorization-local'];
+        if (!token) {
+            return res.sendStatus(401);
+        }
+        const decoded = jwt.verify(token, process.env.SECRET);
+        
+        const userId = decoded.sub;
+        const { city, location, residuos, uf } = req.body;
+
+        const local = await Local.findById(userId);
+        if (!local) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+
+        const novoLocal = {
+            city,
+            location,
+            residuos,
+            uf
+        };
+        
+        local.local.push(novoLocal);
+        await local.save();
+
+        res.status(201).json({ message: 'Ponto de coleta cadastrado com sucesso.', local });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao cadastrar o ponto de coleta: " + error.message });
+    }
+};
+
+
 module.exports = {
     createLocal,
     loginLocal,
     checkAuthLocal,
     logoutLocal,
-    getLoggedUserLocal
+    getLoggedUserLocal,
+    addColeta
 }

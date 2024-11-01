@@ -47,6 +47,7 @@ app.post("/resgatar", requireAuth, usersController.claimGift);
 app.post("/local", localController.createLocal);
 app.post("/login-local", localController.loginLocal);
 app.get("/check-auth-local", requireAuthLocal, localController.checkAuthLocal);
+app.post("/coleta", requireAuthLocal, localController.addColeta);
 app.get("/logout-local", localController.logoutLocal);
 
 app.listen(process.env.PORT);

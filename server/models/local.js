@@ -16,6 +16,7 @@ const localSchema = new mongoose.Schema({
     type: Number,
     default: 2
   },
+  local:[],
   visitas: [{
     visitante: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  
     dataVisita: { type: Date, default: Date.now },  

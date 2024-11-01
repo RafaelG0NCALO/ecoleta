@@ -2,8 +2,13 @@ import React from 'react';
 import emoji from '../assets/emoji.png';
 import { Link } from 'react-router-dom';
 import { Cog, Coins, Telescope, MapPin, BookOpen } from 'lucide-react';
+import localStore from '../stores/localStore';
 
 export default function Welcome({ userData }) {
+
+  const { local } = localStore();
+  const hasLocalRegistered = local.local && local.local.length > 0;
+
   if (!userData) {
     return <div>Carregando dados do usuário...</div>; // Exibe mensagem enquanto os dados estão sendo carregados
   }
@@ -18,7 +23,9 @@ export default function Welcome({ userData }) {
             Bem vindo, {userData?.nome || 'Usuário'}
           </h1>
         </div>
-        <h1 className='text-[#6C6C80]'>Encontre no mapa um ponto de coleta.</h1>
+        <h1 className='text-[#6C6C80]'>
+          {userData.conta === 2 ? 'Gerencie seu ponto de coleta.' : 'Encontre no mapa um ponto de coleta.'}
+        </h1>
       </div>
 
       <div className='flex justify-end w-full gap-5'>
@@ -51,20 +58,22 @@ export default function Welcome({ userData }) {
           </>
         ) : (
           <>
-            <Link to='' className='bg-[#34CB79] max-md:w-full flex justify-between overflow-hidden items-center h-12 rounded-md text-white'>
+          {hasLocalRegistered ? '' :
+            <Link to='/criar-ponto-de-coleta' className='bg-[#34CB79] max-md:w-full flex justify-between overflow-hidden items-center h-12 rounded-md text-white'>
               <div className='h-full min-w-14 bg-[#2FB86E] flex items-center justify-center'>
                 <MapPin />
               </div>
               <div className='text-white px-4 w-full text-center'>
-                Localização
+                Adicionar ponto de coleta
               </div>
             </Link>
-            <Link to='' className='bg-[#34CB79] max-md:w-full flex justify-between overflow-hidden items-center h-12 rounded-md text-white'>
+            }
+            <Link to='/local-profile' className='bg-[#34CB79] max-md:w-full flex justify-between overflow-hidden items-center h-12 rounded-md text-white'>
               <div className='h-full min-w-14 bg-[#2FB86E] flex items-center justify-center'>
                 <BookOpen />
               </div>
               <div className='text-white px-4 w-full text-center'>
-                Histórico
+                Visitas
               </div>
             </Link>
           </>

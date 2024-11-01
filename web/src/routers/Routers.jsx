@@ -12,6 +12,7 @@ import Premios from '../page/Premios.jsx';
 import LoginLocal from '../page/LoginLocal.jsx';
 import LocalProfile from '../page/LocalProfile.jsx';
 import ProtectedRoute from '../components/RouterController/ProtectedRouter.jsx';
+import CreatePoint from '../page/CreatePoint.jsx';
 
 
 const Routers = () => {
@@ -50,6 +51,14 @@ const Routers = () => {
         <RequireAuth> 
           <Premios/> 
         </RequireAuth>} 
+        />
+
+        <Route 
+        path="criar-ponto-de-coleta" 
+        element={
+        <RequireAuthLocal> 
+          <CreatePoint/> 
+        </RequireAuthLocal>} 
         />
 
         <Route 

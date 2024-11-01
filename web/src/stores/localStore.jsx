@@ -16,6 +16,13 @@ const localStore = create((set) => ({
         senha: "" ,
     },
 
+    coletaForm: {
+      city: "",
+      location: "",
+      residuos: "",
+      uf: ""
+    },
+
     createUserLocal: async () => {
         const { createFormLocal } = localStore.getState();
         await axios.post("/local", createFormLocal);
@@ -80,6 +87,27 @@ const localStore = create((set) => ({
       await axios.get('/logout-local'); 
       set({ loggedInLocal: false, local: null });
     },
+
+    addColeta: async (formData) => {
+      try {
+          const response = await axios.post('/coleta', formData);
+          console.log(response.data.message); // Mensagem de sucesso
+          set({ coletaForm: { city: "", location: "", residuos: "", uf: "" } }); // Limpar o formulário
+      } catch (error) {
+          console.error("Erro ao cadastrar o ponto de coleta:", error.response?.data?.error || error.message);
+      }
+  },
+  
+
+    updateColetaFormField: (e) => {
+        const { name, value } = e.target;
+        set((state) => ({
+            coletaForm: {
+                ...state.coletaForm,
+                [name]: value,
+            }
+        }));
+    }
 
 }));
 
