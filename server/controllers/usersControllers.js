@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const User = require ("../models/user")
-const Gift = require ("../models/gift")
+const Gift = require ("../models/gift");
+const Local = require("../models/local");
 
 const fetchUsers = async (req, res) => {
     const user = await User.find();
@@ -44,12 +45,36 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        await User.deleteOne({ _id: userId });
-        res.json({ success: "Usuário deletado com sucesso" });
+
+        // Verifica se o ID do usuário logado corresponde ao ID da URL
+        if (req.user._id.toString() !== userId) {
+            console.log("Erro: Você não tem permissão para excluir este usuário.");
+            return res.status(403).json({ error: "Você não tem permissão para excluir este usuário." });
+        }
+
+        // Deleta o usuário
+        const deleteResult = await User.deleteOne({ _id: userId });
+
+        if (deleteResult.deletedCount === 0) {
+            console.log("Erro: Usuário não encontrado para exclusão.");
+            return res.status(404).json({ error: "Usuário não encontrado." });
+        }
+
+        // Remove o cookie de autorização
+        res.clearCookie("Authorization", {
+            httpOnly: true,
+            sameSite: 'none', 
+            secure: true, 
+            path: '/',
+        });
+
+        // Retorna sucesso
+        res.json({ success: "Usuário deletado e logout realizado com sucesso." });
     } catch (error) {
+        console.error("Erro ao deletar usuário:", error);  // Log de erro
         res.status(500).json({ error: "Erro ao deletar o usuário: " + error.message });
     }
-}
+};
 
 const login = async (req, res) => {
     try {
@@ -189,6 +214,51 @@ const checkGift = async (req, res) => {
     }
 };
 
+const deleteVisit = async (req, res) => {
+    try {
+        const { visitaId } = req.params;
+        const { userId, localId } = req.body;
+
+        // Encontrar e remover a visita específica
+        const local = await Local.findOneAndUpdate(
+            { 
+                _id: localId, 
+                'visitas._id': visitaId,
+                'visitas.visitante': userId 
+            },
+            { 
+                $pull: { 
+                    visitas: { 
+                        _id: visitaId, 
+                        visitante: userId 
+                    } 
+                } 
+            },
+            { new: true }
+        );
+
+        if (!local) {
+            return res.status(404).json({ 
+                message: 'Visita não encontrada ou você não tem permissão para excluí-la' 
+            });
+        }
+
+        res.status(200).json({ 
+            message: 'Visita excluída com sucesso',
+            local 
+        });
+
+    } catch (error) {
+        console.error('Erro ao excluir visita:', error);
+        res.status(500).json({ 
+            error: 'Erro interno do servidor', 
+            details: error.message 
+        });
+    }
+};
+
+
+
 module.exports = {
     fetchUser,
     fetchUsers,
@@ -202,6 +272,7 @@ module.exports = {
     getGift,
     claimGift,
     checkGift,
-    createGift
+    createGift,
+    deleteVisit
 }
 

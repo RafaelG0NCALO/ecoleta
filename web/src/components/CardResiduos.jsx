@@ -12,6 +12,11 @@ export default function CardResiduos({ residuos, selectedItems, onChange }) {
             checked={selectedItems[residuo.id] || false}
             onChange={onChange}
           />
+
+          <p className='absolute top-0 right-0 p-1 rounded-md peer-checked:bg-green-500 bg-gray-200 font-bold text-gray-700 peer-checked:text-white'>
+            +{residuo.points}
+          </p>
+
           <label 
             htmlFor={residuo.id} 
             className="flex flex-col items-center justify-center border-4 border-gray-200 rounded-lg p-4 w-full h-32 cursor-pointer bg-[#ffffff] transition-all duration-300 peer-checked:border-green-500 peer-checked:bg-green-100"

@@ -11,6 +11,8 @@ const localStore = create((set) => ({
         senha: "" ,
     },
 
+    formData: { nome: '', email: '' },
+
     loginFormLocal:{ 
         email: "", 
         senha: "" ,
@@ -22,6 +24,8 @@ const localStore = create((set) => ({
       residuos: "",
       uf: ""
     },
+
+    locais: [],
 
     createUserLocal: async () => {
         const { createFormLocal } = localStore.getState();
@@ -98,7 +102,6 @@ const localStore = create((set) => ({
       }
   },
   
-
     updateColetaFormField: (e) => {
         const { name, value } = e.target;
         set((state) => ({
@@ -107,7 +110,39 @@ const localStore = create((set) => ({
                 [name]: value,
             }
         }));
-    }
+    },
+
+    fetchLocais: async () => {
+      set({ loading: true, error: null });
+      try {
+          const response = await axios.get('/locais');
+          set({ locais: response.data.local });
+      } catch (error) {
+          console.log(error)
+      }
+    },
+
+    updateLocal: async (localId, localData) => {
+      try {
+          const res = await axios.put(`/local/${localId}`, localData); 
+          set({ local: res.data.local }); 
+      } catch (error) {
+          console.error("Erro ao atualizar o usuário:", error);
+          throw error;
+      }
+    },
+
+    deleteLocal: async (userId) => {
+      try {
+          await axios.delete(`/local-user/${userId}`);
+          set({ loggedInLocal: false, local: null });
+          console.log('Conta deletada com sucesso.');
+      } catch (error) {
+          console.error("Erro ao tentar deletar a conta:", error);
+          throw error;
+      }
+  },
+  
 
 }));
 

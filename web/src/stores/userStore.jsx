@@ -90,6 +90,19 @@ const userStore = create((set) => ({
       await axios.get('/logout'); 
       set({ loggedIn: false, user: null });
     },
+
+    deleteUser: async (userId) => {
+      try {
+          const res = await axios.delete(`/users/${userId}`, {
+              withCredentials: true,  // Garante que o cookie será enviado junto com a requisição
+          });
+          set({ user: null, loggedIn: false }); // Remove o usuário do estado
+      } catch (error) {
+          console.error("Erro ao deletar o usuário:", error);
+          throw error;
+      }
+  },
+  
     
 }));
 

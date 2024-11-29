@@ -28,17 +28,30 @@ app.get("/users", usersController.fetchUsers);
 app.get("/users/:id", usersController.fetchUser);
 app.post("/users", usersController.createUser);
 app.put("/users/:id", requireAuth, usersController.updateUser);
-app.delete("/users/:id", usersController.deleteUser );
+app.delete("/users/:id", requireAuth, usersController.deleteUser);
 
 //Login
 app.post("/login", usersController.login);
 app.get('/check-auth', requireAuth, usersController.checkAuth);
 app.get("/logout", usersController.logout);
 
-// Rota para retornar os dados do usuário logado
+// Usuarios local visitas
 app.get("/profile-user", requireAuth, usersController.getLoggedUser);
 app.get("/profile-user-local", requireAuthLocal, localController.getLoggedUserLocal);
+app.put('/edit-profile-user-local/:id', requireAuthLocal, localController.editUserLocal);
+app.get('/listar-visitas/:id', requireAuthLocal, localController.listVisitsInLocal);
+app.get('/listar-visitante/:id', requireAuthLocal, localController.fetchUserVisitInfo);
+app.put('/status/:id', requireAuthLocal, localController.atualizarStatusVisita);
+app.delete('/local/:id', requireAuthLocal, localController.deleteLocal);
+app.put('/local/:id', requireAuthLocal, localController.editLocal);
+app.delete('/local-user/:id', requireAuthLocal, localController.deleteContaLocal);
 
+//visita
+app.post("/visita", requireAuth, localController.registerVisit);
+app.get('/visita', requireAuth, localController.listVisits);
+app.delete('/visita/:visitaId', requireAuth, usersController.deleteVisit);
+
+//Gift
 app.get("/premios", requireAuth, usersController.getGift);
 app.post("/premios", requireAuth, usersController.createGift);
 app.post("/resgatar", requireAuth, usersController.claimGift);
@@ -49,5 +62,6 @@ app.post("/login-local", localController.loginLocal);
 app.get("/check-auth-local", requireAuthLocal, localController.checkAuthLocal);
 app.post("/coleta", requireAuthLocal, localController.addColeta);
 app.get("/logout-local", localController.logoutLocal);
+app.get("/locais", requireAuth, localController.getLocais);
 
 app.listen(process.env.PORT);

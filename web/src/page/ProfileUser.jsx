@@ -6,7 +6,7 @@ import Welcome from '../components/Welcome';
 import userStore from '../stores/userStore';
 
 export default function ProfileUser() {
-  const { user, fetchUserProfile, loggedIn, updateUser } = userStore();
+  const { user, fetchUserProfile, loggedIn, updateUser, deleteUser } = userStore();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -49,6 +49,28 @@ export default function ProfileUser() {
     }
   };
 
+  const handleDelete = () => {
+    const isConfirmed = window.confirm('Você tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.');
+    if (isConfirmed) {
+        deleteUser(user._id)
+            .then(() => {
+                alert('Sua conta foi excluída com sucesso!');
+                navigate('/login');  // Redireciona para a página de login após a exclusão
+            })
+            .catch((error) => {
+                console.error("Erro ao excluir a conta:", error);  // Log detalhado do erro
+                if (error.response) {
+                    // Se a resposta de erro estiver disponível
+                    console.error("Erro no servidor:", error.response.data);
+                    alert(`Erro: ${error.response.data.error}`);
+                } else {
+                    alert('Erro ao excluir a conta. Tente novamente.');
+                }
+            });
+    }
+};
+
+
   if (!user) {
     return <div>Carregando dados do usuário...</div>;
   }
@@ -89,7 +111,10 @@ export default function ProfileUser() {
                   <Save /> Salvar
                 </div>
               </button>
-              <button className='bg-[#dc7d5d] transition-all hover:bg-[#d16f4e] w-full mb-2 flex justify-between overflow-hidden items-center h-16 rounded-md text-white'>
+              <button 
+                type='button'  // Usar 'button' em vez de 'submit' para evitar que o formulário seja enviado
+                onClick={handleDelete}  // Chama a função de exclusão ao clicar
+                className='bg-[#dc7d5d] transition-all hover:bg-[#d16f4e] w-full mb-2 flex justify-between overflow-hidden items-center h-16 rounded-md text-white'>
                 <div className='text-white px-8 flex gap-5 w-full text-center'>
                   <Trash2 /> Deletar
                 </div>

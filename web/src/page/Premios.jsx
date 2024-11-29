@@ -4,6 +4,7 @@ import CardGift from '../components/CardGift';
 import TitleSubtitle from '../components/TitleSubtitle';
 import Welcome from '../components/Welcome';
 import userStore from '../stores/userStore';
+import ListVisit from '../components/ListVisit';
 
 export default function Premios() {
 
@@ -28,6 +29,8 @@ export default function Premios() {
         <Welcome userData={user} />
         <TitleSubtitle title='Resgatar'/>
         <CardGift onClaim={() => fetchUserProfile()}/>
+        <TitleSubtitle title='Visitas' subtitle='Gerencie suas visitas e ganhe pontos'/>
+        <ListVisit/>
       </div>
     </div>
   );

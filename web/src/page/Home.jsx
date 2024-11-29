@@ -2,6 +2,7 @@ import React from 'react'
 import pessoinhas from '../assets/pessoinhas.png'
 import { CornerDownRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import CollectionPointsMap from '../components/teste'
 
 export default function Home() {
   return (

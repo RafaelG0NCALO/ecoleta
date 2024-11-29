@@ -13,6 +13,8 @@ import LoginLocal from '../page/LoginLocal.jsx';
 import LocalProfile from '../page/LocalProfile.jsx';
 import ProtectedRoute from '../components/RouterController/ProtectedRouter.jsx';
 import CreatePoint from '../page/CreatePoint.jsx';
+import EditPoint from '../page/EditPoint.jsx';
+import EditarLocalPessoal from '../page/EditarLocalPessoal.jsx';
 
 
 const Routers = () => {
@@ -58,6 +60,22 @@ const Routers = () => {
         element={
         <RequireAuthLocal> 
           <CreatePoint/> 
+        </RequireAuthLocal>} 
+        />
+
+        <Route 
+        path="editar-ponto-de-coleta" 
+        element={
+        <RequireAuthLocal> 
+          <EditPoint/> 
+        </RequireAuthLocal>} 
+        />
+
+        <Route 
+        path="editar-dados-de-coleta" 
+        element={
+        <RequireAuthLocal> 
+          <EditarLocalPessoal/> 
         </RequireAuthLocal>} 
         />
 
